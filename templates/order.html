@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if current_user.is_admin %}
+        <h3>Все заказы в системе</h3>
+    {% else %}
+        <h3>Ваши заказы</h3>
+    {% endif %}
+    
+    {% if orders %}
+        <div class="list-group">
+            {% for order in orders %}
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Заказ №{{ order.id }}</h5>
+                        <p><strong>Дата:</strong> {{ order.created_at.strftime('%d-%m-%Y %H:%M') }}</p>
+                        <p><strong>Адрес доставки:</strong> {{ order.address }}</p>
+                        <p><strong>Телефон:</strong> {{ order.phone }}</p>
+                        <p><strong>Комментарий:</strong> {{ order.comment or 'Нет комментариев' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Состав заказа:</h5>
+                        <ul>
+                            {% for item in order.items %}
+                                <li>{{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} ₽</li>
+                            {% endfor %}
+                        </ul>
+                        <p><strong>Общая сумма:</strong> {{ order.total_price }} ₽</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            У вас нет заказов.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

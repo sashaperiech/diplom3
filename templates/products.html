@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Наша продукция</h1>
+    
+    <!-- Фильтр по категориям -->
+    <div class="mb-4">
+        <form class="d-flex" method="GET">
+            <select name="category" class="form-select me-2">
+                <option value="">Все категории</option>
+                <option value="Сувениры" {% if request.args.get('category') == 'Сувениры' %}selected{% endif %}>Сувениры</option>
+                <option value="Книги" {% if request.args.get('category') == 'Книги' %}selected{% endif %}>Книги</option>
+                <option value="Ремесла" {% if request.args.get('category') == 'Ремесла' %}selected{% endif %}>Ремесла</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Фильтр</button>
+        </form>
+    </div>
+
+    <!-- Карточки товаров -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow">
+                {% if product.image and product.image != '' %}
+                    <img src="{{ url_for('static', filename=product.image) }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-box-open fa-5x text-muted"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="text-muted">{{ product.category }}</p>
+                    <h5 class="text-primary">{{ product.price }} ₽</h5>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ url_for('product_detail', id=product.id) }}" class="btn btn-sm btn-outline-primary">
+                        Подробнее
+                    </a>
+                    <form method="POST" action="{{ url_for('cart') }}" class="d-inline">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-sm btn-success ms-2">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </form>
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                    <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" class="d-inline">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-sm btn-success ms-2 bg-danger border-0">
+                            <i class="fas fa-cart-plus"></i> Удалить
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

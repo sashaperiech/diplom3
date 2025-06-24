@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Продукция Вологодского колледжа</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="display-4">Добро пожаловать!</h1>
+    <p class="lead">Система учета продукции колледжа</p>
+    <img src="{{ url_for('static', filename='images/college_logo.png') }}" class="img-fluid my-4" width="200">
+    <div class="mt-4">
+        <a href="/products" class="btn btn-primary btn-lg mx-2">
+            <i class="fas fa-box-open"></i> Каталог
+        </a>
+        <a href="/about_us" class="btn btn-primary btn-lg mx-2">
+            <i class="fas"></i> О колледже
+        </a>
+        {% if current_user.is_authenticated and current_user.is_admin %}
+            <a href="/add_product" class="btn btn-success btn-lg mx-2">
+                <i class="fas fa-plus"></i> Добавить
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

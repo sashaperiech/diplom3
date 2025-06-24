@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container my-5">
+        <!-- Заголовок страницы -->
+        <div class="text-center">
+            <h1 class="section-title">Добро пожаловать в наш колледж!</h1>
+            <p class="section-content">Мы гордимся нашими традициями, академической атмосферой и богатым наследием.</p>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h2 class="section-title">О Губернаторском колледже народных промыслов</h2>
+                <p class="section-content">Губернаторский колледж народных промыслов — бюджетное профессиональное образовательное учреждение Вологодской области.
+Расположен в Вологде по адресу: ул. Козлёнская, д. 117.</p>
+                <img src="{{ url_for('static', filename='images/first.png') }}" alt="О Губернаторском колледже народных промыслов" class="college-img">
+            </div>
+        </div>
+
+        <!-- Раздел: Наша миссия -->
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h2 class="section-title">История колледжа</h2>
+                <p class="section-content">
+Колледж основан 8 марта 1928 года как Вологодская кружевная художественная школа. Её создали для подготовки руководящих кадров, которые должны были возрождать и развивать кружевной промысел.</p>
+                <img src="{{ url_for('static', filename='images/second.png') }}" alt="История колледжа" class="college-img">
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h2 class="section-title">Некоторые этапы развития:</h2>
+                <p class="section-content">
+В 1961 году школу передали в систему профессионального-технического образования, она стала училищем. 
+С 1998 года училище работало в статусе «Профессиональное училище №15 народных промыслов» и ввело двухступенчатую подготовку по профессии «Мастер народных художественных промыслов». 
+В 2010 году училище переведено в статус государственного образовательного учреждения среднего профессионального образования и получило название «Губернаторский колледж народных промыслов».</p>
+                <img src="{{ url_for('static', filename='images/third.png') }}" alt="Некоторые этапы развития" class="college-img">
+            </div>
+        </div>
+        <h2 class="section-title">Контакты</h2>
+        <ul class="section-content">
+            <li>Телефоны: +7 (8172) 75-39-07, +7 (8172) 75-63-07.</li>
+            <li>Сайт: gubcollege.ru.</li>
+            <li>Электронная почта: poo@gubcollege.ru.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock content %}
+
+

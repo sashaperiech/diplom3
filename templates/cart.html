@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4"><i class="fas fa-shopping-cart"></i> Ваша корзина</h1>
+    
+    {% if not cart_products %}
+    <div class="alert alert-info">
+        Ваша корзина пуста. <a href="{{ url_for('products') }}" class="alert-link">Перейти к покупкам</a>
+    </div>
+    {% else %}
+    <div class="row">
+        <!-- Список товаров -->
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for product in cart_products %}
+                        <div class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    {% if product.image %}
+                                    <a href="{{ url_for('product_detail', id=product.id) }}">
+                                        <img src="{{ url_for('static', filename=product.image) }}" 
+                                             class="img-fluid rounded" alt="{{ product.name }}">
+                                    </a>
+                                    {% else %}
+                                    <div class="bg-light d-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px;">
+                                        <i class="fas fa-box-open text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="mb-1">{{ product.name }}</h5>
+                                    <small class="text-muted">{{ product.category }}</small>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <p>Количество: {{ quantities[product.id|string] }}</p>
+                                    <h5 class="mb-0">{{ (product.price * quantities[product.id|string]) | round(2) }} ₽</h5>
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    <a href="{{ url_for('remove_from_cart', product_id=product.id) }}" 
+                                       class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Итоговая сумма -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Ваш заказ</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Товары ({{ cart_products|length }}):</span>
+                        <span>{{ total_price }} ₽</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Доставка:</span>
+                        <span>Бесплатно</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold fs-5">
+                        <span>Итого:</span>
+                        <span>{{ total_price }} ₽</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ url_for('products') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-chevron-left"></i> Продолжить покупки
+                    </a>
+                    <button class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                        Оформить заказ <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Модальное окно оформления заказа -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Оформление заказа</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('checkout') }}">
+                    <div class="form-group">
+                        <label for="address">Адрес</label>
+                        <input type="text" class="form-control" id="address" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="text" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Комментарий</label>
+                        <textarea class="form-control" id="comment" name="comment"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Оформить заказ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

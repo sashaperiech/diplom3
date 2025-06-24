@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Изображение товара -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                {% if product.image %}
+                <img src="{{ url_for('static', filename=product.image) }}" 
+                     class="card-img-top p-3" alt="{{ product.name }}"
+                     style="max-height: 500px; object-fit: contain;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                     style="height: 300px;">
+                    <i class="fas fa-box-open fa-5x text-muted"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Информация о товаре -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">{{ product.name }}</h2>
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge bg-primary">{{ product.category }}</span>
+                        <span class="ms-3 text-warning">
+                            {% for i in range(5) %}
+                                <i class="fas fa-star{% if i >= 4 %} text-muted{% endif %}"></i>
+                            {% endfor %}
+                        </span>
+                    </div>
+
+                    <h3 class="text-success mb-4">{{ product.price }} ₽</h3>
+
+                    <div class="mb-4">
+                        <h5>Описание:</h5>
+                        <p class="card-text">{{ product.description or 'Нет описания' }}</p>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <form method="POST" action="{{ url_for('cart') }}" class="d-flex align-items-center mb-4">
+                            <div class="input-group" style="width: 120px;">
+                                <button type="button" class="btn btn-outline-secondary minus-btn">-</button>
+                                <input type="number" name="quantity" class="form-control text-center" value="1" min="1">
+                                <button type="button" class="btn btn-outline-secondary plus-btn">+</button>
+                            </div>
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-success btn-lg ms-3">
+                                <i class="fas fa-cart-plus"></i> В корзину
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card bg-light p-3">
+                        <div class="d-flex">
+                            <i class="fas fa-truck fa-2x text-muted me-3"></i>
+                            <div>
+                                <h6>Бесплатная доставка</h6>
+                                <small class="text-muted">По Вологде - 1-2 дня</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дополнительная информация -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="details-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#details" type="button" role="tab">
+                                Характеристики
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#reviews" type="button" role="tab">
+                                Отзывы (3)
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-3" id="productTabsContent">
+                        <div class="tab-pane fade show active" id="details" role="tabpanel">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Категория</th>
+                                        <td>{{ product.category }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Материал</th>
+                                        <td>Натуральное дерево</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Размеры</th>
+                                        <td>20 × 15 × 10 см</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Производитель</th>
+                                        <td>Вологодский губернаторский колледж</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="mb-4">
+                                <div class="d-flex mb-3">
+                                    <img src="https://via.placeholder.com/50" class="rounded-circle me-3">
+                                    <div>
+                                        <h6>Иван Петров</h6>
+                                        <div class="text-warning mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <p>Отличное качество! Рекомендую всем.</p>
+                                        <small class="text-muted">15.05.2023</small>
+                                    </div>
+                                </div>
+                                <!-- Другие отзывы -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Похожие товары -->
+    <div class="row mt-5">
+        <h3 class="mb-4">Похожие товары</h3>
+        {% for similar in similar_products%}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <a href="{{ url_for('product_detail', id=similar.id) }}">
+                    {% if similar.image %}
+                    <img src="{{ url_for('static', filename=similar.image) }}" class="card-img-top" 
+                         style="height: 200px; object-fit: cover;" alt="{{ similar.name }}">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                         style="height: 200px;">
+                        <i class="fas fa-box-open fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{{ url_for('product_detail', id=similar.id) }}" class="text-decoration-none">
+                            {{ similar.name }}
+                        </a>
+                    </h5>
+                    <p class="text-muted">{{ similar.category }}</p>
+                    <h5 class="text-success">{{ similar.price }} ₽</h5>
+                </div>
+                <div class="card-footer bg-white">
+                    <form method="POST" action="{{ url_for('cart') }}">
+                        <input type="hidden" name="product_id" value="{{ similar.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+// Обработчики для кнопок +/-
+document.querySelector('.plus-btn').addEventListener('click', function() {
+    let input = this.parentNode.querySelector('input');
+    input.value = parseInt(input.value) + 1;
+});
+
+document.querySelector('.minus-btn').addEventListener('click', function() {
+    let input = this.parentNode.querySelector('input');
+    if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+    }
+});
+</script>
+{% endblock %}

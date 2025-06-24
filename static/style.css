@@ -1,0 +1,60 @@
+/* Основные цвета */
+:root {
+    --college-blue: #0056b3;
+    --college-gold: #ffc107;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.btn-primary {
+    background-color: var(--college-blue);
+    border-color: var(--college-blue);
+}
+
+.btn-primary:hover {
+    background-color: #004494;
+}
+
+/* Анимация кнопок */
+.btn {
+    transition: transform 0.2s;
+}
+.btn:hover {
+    transform: translateY(-2px);
+}
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Чтобы футер всегда был внизу */
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+.container {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
+}
